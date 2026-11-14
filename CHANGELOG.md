@@ -2,6 +2,12 @@
 
 What each release changed for you, newest first. Each line is a commit's summary, linked to its full description and diff.
 
+## 1.0.1 - 2026-11-14
+
+### Fixes
+
+- Require InternetData 2.9.1: a 403 can mean the key lacks the ip.lookup scope ([`927a335`](https://github.com/internetdata/sdk-dotnet-aspnetcore/commit/927a33523aad32f3919e9628454608677997c340))
+
 ## 1.0.0 - 2026-11-14
 
 ### Features
