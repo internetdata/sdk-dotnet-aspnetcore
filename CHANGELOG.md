@@ -2,6 +2,12 @@
 
 What each release changed for you, newest first. Each line is a commit's summary, linked to its full description and diff.
 
+## 1.0.3 - 2026-11-20
+
+### Fixes
+
+- Require InternetData 2.14.0: it reads a paid domain answer's new members ([`36b425a`](https://github.com/internetdata/sdk-dotnet-aspnetcore/commit/36b425a881621c4ffe54363842c072a138ebbda2))
+
 ## 1.0.2 - 2026-11-20
 
 ### Fixes
