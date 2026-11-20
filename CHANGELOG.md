@@ -2,6 +2,12 @@
 
 What each release changed for you, newest first. Each line is a commit's summary, linked to its full description and diff.
 
+## 1.0.2 - 2026-11-20
+
+### Fixes
+
+- Require InternetData 2.13.0: a reduced answer is cached a minute at most ([`ff10a36`](https://github.com/internetdata/sdk-dotnet-aspnetcore/commit/ff10a369d1474f3540f87a1d45fd70b373a06d12))
+
 ## 1.0.1 - 2026-11-14
 
 ### Fixes
