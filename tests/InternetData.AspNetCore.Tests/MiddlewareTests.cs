@@ -321,6 +321,54 @@ public class MiddlewareTests
         Assert.Equal(new[] { sent }, api.Authorizations);
     }
 
+    // The README's setup with a condition on the bot flag, which every plan answers, from PUBLIC
+    // peers whose answers a recording API serves: a crawler's address is refused, and another
+    // visitor's answer reaches the app with the flag false.
+    [Fact]
+    public async Task TheReadmesSetupRefusesABotsAddressFromAPublicPeer()
+    {
+        const string Crawler = "66.249.66.1";
+        await using var api = await RecordingApi.StartAsync(
+            ip => Stub.Lookup(extra: ip == Crawler ? "\"is_bot\":true" : "\"is_bot\":false"));
+        var builder = WebApplication.CreateBuilder();
+        builder.WebHost.UseTestServer();
+        builder.Configuration["INTERNETDATA_API_KEY"] = "id_example_key";
+        await using var app = builder.Build();
+        app.Use((context, next) =>
+        {
+            context.Connection.RemoteIpAddress = IPAddress.Parse(context.Request.Headers["X-Test-Peer"]!);
+            return next();
+        });
+
+        app.UseInternetData(o =>
+        {
+            o.ApiKey = builder.Configuration["INTERNETDATA_API_KEY"];
+            o.BaseUrl = api.BaseUrl;
+            o.BlockCondition = new[] { new Condition { ["is_bot"] = true } };
+        });
+
+        app.MapGet("/", (HttpContext context) => context.GetInternetData()?.Result?.IsBot switch
+        {
+            true => "bot",
+            false => "not a bot",
+            null => "nothing attached",
+        });
+        await app.StartAsync();
+
+        async Task<HttpResponseMessage> From(string peer)
+        {
+            var request = new HttpRequestMessage(HttpMethod.Get, "/");
+            request.Headers.TryAddWithoutValidation("X-Test-Peer", peer);
+            return await app.GetTestClient().SendAsync(request);
+        }
+
+        Assert.Equal(HttpStatusCode.Forbidden, (await From(Crawler)).StatusCode);
+        var visitor = await From(PublicIp);
+        Assert.Equal(HttpStatusCode.OK, visitor.StatusCode);
+        Assert.Equal("not a bot", await visitor.Content.ReadAsStringAsync());
+        Assert.Equal(new[] { $"/{Crawler}", $"/{PublicIp}" }, api.Asked);
+    }
+
     [Fact]
     public async Task AConditionThatConstrainsNothingIsRefusedWhenTheAppStarts()
     {
@@ -432,8 +480,9 @@ public class MiddlewareTests
     }
 
     /// <summary>
-    /// A stand-in API on a real socket, answering every lookup with Unlimited's answer and
-    /// recording the path and the Authorization header of each request.
+    /// A stand-in API on a real socket, answering every lookup with Unlimited's answer, or with
+    /// what <c>answer</c> builds for the address, and recording the path and the Authorization
+    /// header of each request.
     /// </summary>
     private sealed class RecordingApi : IAsyncDisposable
     {
@@ -468,7 +517,7 @@ public class MiddlewareTests
             }
         }
 
-        internal static async Task<RecordingApi> StartAsync()
+        internal static async Task<RecordingApi> StartAsync(Func<string, string>? answer = null)
         {
             var builder = WebApplication.CreateBuilder();
             builder.WebHost.UseUrls("http://127.0.0.1:0");
@@ -483,8 +532,9 @@ public class MiddlewareTests
                     api.authorizations.Add(context.Request.Headers.Authorization.FirstOrDefault());
                 }
                 context.Response.ContentType = "application/json";
+                var ip = path.TrimStart('/');
                 await context.Response.WriteAsync(
-                    Stub.Lookup().Replace("$IP", path.TrimStart('/'), StringComparison.Ordinal));
+                    (answer?.Invoke(ip) ?? Stub.Lookup()).Replace("$IP", ip, StringComparison.Ordinal));
             });
             await app.StartAsync();
             return api;
