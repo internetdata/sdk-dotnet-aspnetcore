@@ -2,6 +2,12 @@
 
 What each release changed for you, newest first. Each line is a commit's summary, linked to its full description and diff.
 
+## 1.0.4 - 2026-11-22
+
+### Features
+
+- Require InternetData 2.15.0: it reads whether a bot uses an address, and whose ([`c6dc2c9`](https://github.com/internetdata/sdk-dotnet-aspnetcore/commit/c6dc2c9d45a1b58f486c33cded0c8795214058cc))
+
 ## 1.0.3 - 2026-11-20
 
 ### Fixes
