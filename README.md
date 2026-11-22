@@ -55,7 +55,7 @@ app.UseInternetData(o =>
 });
 ```
 
-A condition is written in the shape of a result, keyed by the same names the API uses, and only the members you name are considered, so it can refuse on anything in the answer. The country works on every plan, and so do the first two of these:
+A condition is written in the shape of a result, keyed by the same names the API uses, and only the members you name are considered, so it can refuse on anything in the answer. The country works on every plan, and so do the first three of these:
 
 ```csharp
 // the network's type
@@ -63,6 +63,9 @@ new Condition { ["asn"] = new Condition { ["type"] = "hosting" } }
 
 // anycast and satellite space: a list is OR
 new[] { new Condition { ["is_anycast"] = true }, new Condition { ["is_satellite"] = true } }
+
+// crawlers, monitors and scanners
+new Condition { ["is_bot"] = true }
 
 // traffic from servers, not people
 new[] { new Condition { ["is_hosting"] = true }, new Condition { ["is_cdn"] = true } }
