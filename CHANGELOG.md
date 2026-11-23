@@ -2,6 +2,12 @@
 
 What each release changed for you, newest first. Each line is a commit's summary, linked to its full description and diff.
 
+## 1.0.5 - 2026-11-23
+
+### Fixes
+
+- Require InternetData 2.15.1: it refuses an answer missing the AS's country or RPKI status ([`e0825ba`](https://github.com/internetdata/sdk-dotnet-aspnetcore/commit/e0825ba4544ec4c97e65371f04f26577edfe3db9))
+
 ## 1.0.4 - 2026-11-22
 
 ### Features
