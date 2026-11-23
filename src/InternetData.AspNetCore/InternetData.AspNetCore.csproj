@@ -48,7 +48,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="InternetData" Version="2.15.0" />
+    <PackageReference Include="InternetData" Version="2.15.1" />
   </ItemGroup>
 
   <ItemGroup>
