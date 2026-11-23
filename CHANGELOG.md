@@ -2,6 +2,12 @@
 
 What each release changed for you, newest first. Each line is a commit's summary, linked to its full description and diff.
 
+## 1.0.6 - 2026-11-23
+
+### Fixes
+
+- Require InternetData 2.15.2: it says what a bot's provider and provider name hold for an address that is not verified ([`01c9a14`](https://github.com/internetdata/sdk-dotnet-aspnetcore/commit/01c9a14af806ae1b0950ff1ac2970b4ab20f796a))
+
 ## 1.0.5 - 2026-11-23
 
 ### Fixes
