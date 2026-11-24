@@ -85,7 +85,7 @@ new Condition { ["is_vpn"] = true, ["vpn"] = new Condition { ["provider"] = "nor
 new Condition { ["resproxy"] = new Condition { ["hits"] = Bound.Gte(5) } }
 ```
 
-Values are matched by equality, strings without regard to case. An array means any-of. `Bound.Gte`, `Gt`, `Lte` and `Lt` compare numbers and chain into a range (`Bound.Gte(5).AndLt(100)`); every bound you give must hold. Members set to `false` or `null` are ignored, so a condition states the signals you act on; one that constrains nothing would match every request, and is refused when the app starts rather than silently blocking all your traffic.
+Values are matched by equality, strings without regard to case. An array means any-of. A member the answer holds as a list, such as `pubproxy.protocols` or the `web` rows, matches when any element does, so `new Condition { ["web"] = new Condition { ["port"] = 443 } }` refuses an address with a web server on 443. `Bound.Gte`, `Gt`, `Lte` and `Lt` compare numbers and chain into a range (`Bound.Gte(5).AndLt(100)`); every bound you give must hold. Members set to `false` or `null` are ignored, so a condition states the signals you act on; one that constrains nothing would match every request, and is refused when the app starts rather than silently blocking all your traffic.
 
 Replace the refusal with `OnBlocked`:
 
