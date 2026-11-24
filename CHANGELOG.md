@@ -2,6 +2,12 @@
 
 What each release changed for you, newest first. Each line is a commit's summary, linked to its full description and diff.
 
+## 2.0.0 - 2026-11-24
+
+### Breaking changes
+
+- Require InternetData 3.0.0: a vocabulary value the API adds reads, and a list member matches any element ([`8d0badc`](https://github.com/internetdata/sdk-dotnet-aspnetcore/commit/8d0badc4c6ae7899064fbc99c344cb9876bf4742))
+
 ## 1.0.6 - 2026-11-23
 
 ### Fixes
