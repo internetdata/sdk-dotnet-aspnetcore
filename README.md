@@ -97,6 +97,21 @@ o.OnBlocked = (context, lookup) =>
 };
 ```
 
+## Let a verified crawler through
+
+A condition such as `is_bot` or `is_hosting` refuses Googlebot too, since a search engine crawls from its own datacenter. Set `AllowBots` and the middleware sends each request's own `User-Agent` with its lookup; on a paid plan a request whose answer's verdict is `Verified` (the agent's operator vouches for this address) is never refused, whatever the condition matches, and the answer is still attached:
+
+```csharp
+app.UseInternetData(o =>
+{
+    o.ApiKey = builder.Configuration["INTERNETDATA_API_KEY"];
+    o.BlockCondition = new[] { new Condition { ["is_hosting"] = true } };
+    o.AllowBots = true;
+});
+```
+
+The verdict is on the answer as `user_agent` (`lookup.Result.UserAgent`: the agent it names, its kind, and `Verified`, `Spoofed`, `Unverifiable` or `Not_bot`), so with `AllowBots` on a condition can refuse a forged crawler: `new Condition { ["user_agent"] = new Condition { ["verdict"] = "spoofed" } }`. A request with no `User-Agent` sends none. It is off by default, which keeps one cached answer per address rather than one per agent. Without a key, or on a free key past its trial, no answer carries a verdict, so nothing is let through and `OnMissingField` says so once.
+
 ## Where the client address comes from
 
 This is the setting that decides whether any of the above works, and it is the one thing only you can get right.
