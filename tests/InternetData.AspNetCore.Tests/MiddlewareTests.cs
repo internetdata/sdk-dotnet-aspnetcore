@@ -321,7 +321,7 @@ public class MiddlewareTests
         Assert.Equal(new[] { sent }, api.Authorizations);
     }
 
-    // The README's setup with a condition on the bot flag, which every plan answers, from PUBLIC
+    // The README's setup with a condition on the bot flag, which a paid plan answers, from PUBLIC
     // peers whose answers a recording API serves: a crawler's address is refused, and another
     // visitor's answer reaches the app with the flag false.
     [Fact]

@@ -17,7 +17,7 @@ dotnet add package InternetData.AspNetCore
 
 Targets `net8.0`, so it loads on .NET 8 and every later runtime.
 
-Without an API key a lookup is on Unlimited, the free plan: the country, the network and the company behind the address, Tor, relay, anycast, carrier and satellite space and the service flags, with no daily or monthly cap. Every lookup your app makes comes from your server's one address, though, so a busy site will see bursts refused. A paid plan answers every field, VPN, the proxy flags, hosting, CDN and the city among them; create a key in the [console](https://app.internetdata.io). A free account tries every field.
+Without an API key a lookup is on Unlimited, the free plan: the country, the network and the company behind the address, Tor, relay and anycast space, with no daily or monthly cap. Every lookup your app makes comes from your server's one address, though, so a busy site will see bursts refused. A paid plan answers every field, VPN, the proxy flags, hosting, CDN and the city among them; create a key in the [console](https://app.internetdata.io). A free account tries every field.
 
 ```csharp
 using InternetData.AspNetCore;
@@ -55,17 +55,17 @@ app.UseInternetData(o =>
 });
 ```
 
-A condition is written in the shape of a result, keyed by the same names the API uses, and only the members you name are considered, so it can refuse on anything in the answer. The country works on every plan, and so do the first three of these:
+A condition is written in the shape of a result, keyed by the same names the API uses, and only the members you name are considered, so it can refuse on anything in the answer. The country works on every plan, and so do the first two of these:
 
 ```csharp
 // the network's type
 new Condition { ["asn"] = new Condition { ["type"] = "hosting" } }
 
-// anycast and satellite space: a list is OR
-new[] { new Condition { ["is_anycast"] = true }, new Condition { ["is_satellite"] = true } }
+// anycast space
+new Condition { ["is_anycast"] = true }
 
-// crawlers, monitors and scanners
-new Condition { ["is_bot"] = true }
+// satellite space, or crawlers, monitors and scanners: a list is OR, on a paid plan or the trial
+new[] { new Condition { ["is_satellite"] = true }, new Condition { ["is_bot"] = true } }
 
 // traffic from servers, not people
 new[] { new Condition { ["is_hosting"] = true }, new Condition { ["is_cdn"] = true } }
@@ -175,7 +175,7 @@ Beyond a few million distinct visitors a day, stop calling the API per request: 
 
 ## Absent is not false
 
-Unlimited, with a key or without one, leaves out `IsVpn`, `IsHosting`, `IsCdn` and the four proxy flags, the detail behind them, and the paid members inside `Location`, `Asn`, `Company` and `Abuse`, such as `Location.City`. A field your plan does not include is `null`, which means "not in your plan" rather than "checked, and no".
+Unlimited, with a key or without one, leaves out `IsVpn`, `IsHosting`, `IsCdn`, the four proxy flags and the bot, carrier, satellite, SSH, SMTP, web, DNS resolver and BitTorrent flags, the detail behind them, and the paid members inside `Location`, `Asn`, `Company` and `Abuse`, such as `Location.City`. A field your plan does not include is `null`, which means "not in your plan" rather than "checked, and no". The bot, carrier, satellite, SSH, SMTP, web, DNS resolver and BitTorrent flags keep the `bool` they were typed as, so `Result.IsBot` and the rest read `false` on Unlimited, and the detail behind each (`Result.Bot`, `Result.Carrier`, ...) is `null`; a condition on one of them is a plan gap the middleware reports, never a `false` it reads.
 
 ```csharp
 found.Result.IsVpn == true   // when you only want the flag
