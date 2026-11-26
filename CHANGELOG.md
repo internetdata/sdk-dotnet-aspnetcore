@@ -2,6 +2,12 @@
 
 What each release changed for you, newest first. Each line is a commit's summary, linked to its full description and diff.
 
+## 2.1.1 - 2026-11-26
+
+### Features
+
+- Require InternetData 3.2.0: a keyless answer without the bot, carrier, satellite and service flags reads ([`b4d41f7`](https://github.com/internetdata/sdk-dotnet-aspnetcore/commit/b4d41f7439918b9c31050f5d6c1d49ebcc829801))
+
 ## 2.1.0 - 2026-11-25
 
 ### Features
