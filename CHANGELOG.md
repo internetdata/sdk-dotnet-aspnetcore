@@ -2,6 +2,12 @@
 
 What each release changed for you, newest first. Each line is a commit's summary, linked to its full description and diff.
 
+## 2.1.2 - 2026-11-27
+
+### Features
+
+- Require InternetData 3.3.0: an answer without the AS's type reads ([`89d8802`](https://github.com/internetdata/sdk-dotnet-aspnetcore/commit/89d88029a7d577ced5e80673e4b7339e60bc88c6))
+
 ## 2.1.1 - 2026-11-26
 
 ### Features
