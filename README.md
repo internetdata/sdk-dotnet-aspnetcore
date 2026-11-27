@@ -55,10 +55,10 @@ app.UseInternetData(o =>
 });
 ```
 
-A condition is written in the shape of a result, keyed by the same names the API uses, and only the members you name are considered, so it can refuse on anything in the answer. The country works on every plan, and so do the first two of these:
+A condition is written in the shape of a result, keyed by the same names the API uses, and only the members you name are considered, so it can refuse on anything in the answer. The country works on every plan, and so does the anycast one of these:
 
 ```csharp
-// the network's type
+// the network's type, on a paid plan or the trial
 new Condition { ["asn"] = new Condition { ["type"] = "hosting" } }
 
 // anycast space
@@ -175,7 +175,7 @@ Beyond a few million distinct visitors a day, stop calling the API per request: 
 
 ## Absent is not false
 
-Unlimited, with a key or without one, leaves out `IsVpn`, `IsHosting`, `IsCdn`, the four proxy flags and the bot, carrier, satellite, SSH, SMTP, web, DNS resolver and BitTorrent flags, the detail behind them, and the paid members inside `Location`, `Asn`, `Company` and `Abuse`, such as `Location.City`. A field your plan does not include is `null`, which means "not in your plan" rather than "checked, and no". The bot, carrier, satellite, SSH, SMTP, web, DNS resolver and BitTorrent flags keep the `bool` they were typed as, so `Result.IsBot` and the rest read `false` on Unlimited, and the detail behind each (`Result.Bot`, `Result.Carrier`, ...) is `null`; a condition on one of them is a plan gap the middleware reports, never a `false` it reads.
+Unlimited, with a key or without one, leaves out `IsVpn`, `IsHosting`, `IsCdn`, the four proxy flags and the bot, carrier, satellite, SSH, SMTP, web, DNS resolver and BitTorrent flags, the detail behind them, and the paid members inside `Location`, `Asn`, `Company` and `Abuse`, such as `Location.City`. A field your plan does not include is `null`, which means "not in your plan" rather than "checked, and no". The bot, carrier, satellite, SSH, SMTP, web, DNS resolver and BitTorrent flags keep the `bool` they were typed as, so `Result.IsBot` and the rest read `false` on Unlimited, and the detail behind each (`Result.Bot`, `Result.Carrier`, ...) is `null`; a condition on one of them is a plan gap the middleware reports, never a `false` it reads. The network's type is typed the same way: `Result.Asn.Type` reads an empty string on an answer without it, as Unlimited's may be, and a condition on `asn.type` is a plan gap too.
 
 ```csharp
 found.Result.IsVpn == true   // when you only want the flag
