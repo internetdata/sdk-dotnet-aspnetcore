@@ -48,7 +48,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="InternetData" Version="3.3.0" />
+    <PackageReference Include="InternetData" Version="3.4.0" />
   </ItemGroup>
 
   <ItemGroup>
