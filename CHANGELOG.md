@@ -2,6 +2,12 @@
 
 What each release changed for you, newest first. Each line is a commit's summary, linked to its full description and diff.
 
+## 2.1.3 - 2026-11-28
+
+### Features
+
+- Require InternetData 3.4.0: AllowBots sends only a crawler's User-Agent, at most four an address ([`e7b855b`](https://github.com/internetdata/sdk-dotnet-aspnetcore/commit/e7b855b3c506539a5729f45b8cdf6c9fc702d3c1))
+
 ## 2.1.2 - 2026-11-27
 
 ### Features
